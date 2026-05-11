@@ -1,8 +1,13 @@
 package com.poultryderby.dao;
 
+import com.poultryderby.model.Duck;
+import com.poultryderby.model.Pheasant;
 import com.poultryderby.model.UserBean;
 import com.poultryderby.model.Poultry;
+import com.poultryderby.model.Turkey;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
     public UserBean login(String username, String password) {
@@ -67,5 +72,45 @@ public class UserDAO {
             e.printStackTrace();
         }
         return false;
+    }
+    public List<Poultry> getUserInventory(int userId) { 
+        List<Poultry> list = new ArrayList<>();
+        String sql = "SELECT * FROM inventory WHERE user_id = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String species = rs.getString("species");
+                String name = rs.getString("name");
+                String rarity = rs.getString("rarity");
+
+                if ("Turkey".equals(species)) list.add(new Turkey(name, rarity));
+                else if ("Pheasant".equals(species)) list.add(new Pheasant(name, rarity));
+                else list.add(new Duck(name, rarity));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public Poultry getPoultryByName(int userId, String name) {
+        String sql = "SELECT * FROM inventory WHERE user_id = ? AND name = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setString(2, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String species = rs.getString("species");
+                String rarity = rs.getString("rarity");
+                if ("Turkey".equals(species)) return new Turkey(name, rarity);
+                if ("Pheasant".equals(species)) return new Pheasant(name, rarity);
+                return new Duck(name, rarity);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
