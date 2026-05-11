@@ -13,7 +13,7 @@
                     <h1>Welcome, ${user.username}!</h1>
                     <p class="lead">Train your poultry to become the ultimate champion.</p>
                     <div class="mt-4">
-                        <a href="career?action=start" class="btn btn-success btn-lg px-5">Start New Career</a>
+                       <a href="career?action=select" class="btn btn-success btn-lg px-5">Start New Career</a>
                     </div>
                 </div>
             </div>
