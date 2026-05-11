@@ -8,13 +8,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/career")
 public class CareerServlet extends HttpServlet {
     private UserDAO userDAO = new UserDAO();
     private HistoryDAO historyDAO = new HistoryDAO();
 
-    @Override
+   @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
@@ -25,12 +26,27 @@ public class CareerServlet extends HttpServlet {
             return;
         }
 
-        if ("start".equals(action)) {
-            // In a real app, we'd pick a poultry from inventory. For now, default Turkey.
-            Poultry p = new Turkey("Default Turkey", "Common");
+        if ("select".equals(action)) {
+            List<Poultry> inventory = userDAO.getUserInventory(user.getId());
+            request.setAttribute("inventory", inventory);
+            request.getRequestDispatcher("select_poultry.jsp").forward(request, response);
+            
+        } else if ("start".equals(action)) {
+            String selectedName = request.getParameter("poultryName");
+            Poultry p = null;
+            
+            if (selectedName != null) {
+                p = userDAO.getPoultryByName(user.getId(), selectedName);
+            }
+            
+            if (p == null) {
+                p = new Turkey("Default Turkey", "Common"); 
+            }
+            
             CareerManager cm = new CareerManager(p);
             session.setAttribute("careerManager", cm);
             response.sendRedirect("career.jsp");
+            
         } else if ("turn".equals(action)) {
             CareerManager cm = (CareerManager) session.getAttribute("careerManager");
             if (cm != null && !cm.isCareerOver()) {
