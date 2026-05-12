@@ -23,6 +23,17 @@
                 <input type="password" name="password" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary w-100">Login</button>
+            <% if (request.getParameter("success") != null) { %>
+                <p class="text-success mt-3 text-center">
+                    REGISTER BERHASIL! SILAHKAN LOGIN
+                </p>
+            <% } %>
+            <div class="text-center mt-3">
+                <p class="mb-0">
+                    Belum punya akun?
+                    <a href="register.jsp">Register</a>
+                </p>
+            </div>
             <% if (request.getParameter("error") != null) { %>
                 <p class="text-danger mt-2 text-center">Invalid credentials!</p>
             <% } %>

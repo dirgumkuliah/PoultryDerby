@@ -113,4 +113,35 @@ public class UserDAO {
         }
         return null;
     }
+    
+    public boolean register(UserBean user) {
+
+    boolean success = false;
+
+    try {
+
+        Connection conn = DatabaseConfig.getConnection();
+
+        String sql = "INSERT INTO users(username, password) VALUES (?, ?)";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+
+        ps.setString(1, user.getUsername());
+        ps.setString(2, user.getPassword());
+
+        int rows = ps.executeUpdate();
+
+        if (rows > 0) {
+            success = true;
+        }
+
+        ps.close();
+        conn.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return success;
+    }   
 }

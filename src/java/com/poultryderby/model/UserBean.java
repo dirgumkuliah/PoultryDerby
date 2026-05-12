@@ -7,7 +7,8 @@ public class UserBean implements Serializable {
     private String username;
     private int gachaCurrency;
     private int shopCurrency;
-
+    private String password;
+    
     public UserBean() {}
 
     public int getId() { return id; }
@@ -21,4 +22,7 @@ public class UserBean implements Serializable {
 
     public int getShopCurrency() { return shopCurrency; }
     public void setShopCurrency(int shopCurrency) { this.shopCurrency = shopCurrency; }
+    
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }
