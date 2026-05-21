@@ -1,6 +1,6 @@
 // CareerManager
 package com.poultryderby.model;
-
+//kiya
 import com.poultryderby.util.GameConstants;
 import java.util.Random;
 
