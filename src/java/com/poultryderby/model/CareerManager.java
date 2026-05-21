@@ -1,3 +1,4 @@
+// CareerManager
 package com.poultryderby.model;
 
 import com.poultryderby.util.GameConstants;
@@ -25,7 +26,7 @@ public class CareerManager {
             case "train_speed": poultry.trainSpeed(); break;
             case "train_iq": poultry.trainIQ(); break;
             case "rest": poultry.rest(); break;
-            case "fight": 
+            case "fight":
             case "race":
                 handleStandardEncounter();
                 break;
@@ -49,13 +50,13 @@ public class CareerManager {
     }
 
     private void checkBossEncounter() {
-        if (currentTurn == GameConstants.YEAR_1_TURNS || 
-            currentTurn == GameConstants.YEAR_1_TURNS + GameConstants.YEAR_2_TURNS || 
+        if (currentTurn == GameConstants.YEAR_1_TURNS ||
+            currentTurn == GameConstants.YEAR_1_TURNS + GameConstants.YEAR_2_TURNS ||
             currentTurn == GameConstants.TOTAL_TURNS) {
-            
-            int bossStat = (currentTurn == GameConstants.YEAR_1_TURNS) ? 300 : 
+
+            int bossStat = (currentTurn == GameConstants.YEAR_1_TURNS) ? 300 :
                            (currentTurn == GameConstants.YEAR_1_TURNS + GameConstants.YEAR_2_TURNS) ? 750 : 1200;
-            
+
             if (calculateWin(poultry.getPrimaryStatValue(), bossStat)) {
                 bossWins++;
                 if (currentTurn == GameConstants.TOTAL_TURNS) endCareer(true);
@@ -68,7 +69,7 @@ public class CareerManager {
     private boolean calculateWin(int playerStat, int enemyStat) {
         if (playerStat >= enemyStat + 300) return true;
         if (playerStat <= enemyStat - 300) return false;
-        
+
         double winProb = (double) playerStat / (playerStat + enemyStat);
         return random.nextDouble() < winProb;
     }
