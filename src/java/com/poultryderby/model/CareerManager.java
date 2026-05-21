@@ -1,5 +1,5 @@
 package com.poultryderby.model;
-// test
+
 import com.poultryderby.util.GameConstants;
 import java.util.Random;
 
