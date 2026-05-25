@@ -8,6 +8,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/gacha")
 public class GachaServlet extends HttpServlet {
@@ -22,30 +24,52 @@ public class GachaServlet extends HttpServlet {
             return;
         }
 
-        if (user.getGachaCurrency() < 100) {
+        int pullCount = getPullCount(request);
+        int cost = pullCount == 10 ? 900 : 100;
+
+        if (user.getGachaCurrency() < cost) {
             response.sendRedirect("gacha.jsp?error=insufficient");
             return;
         }
 
-        Poultry pulled = gachaSystem.pull();
-        boolean isDupe = userDAO.hasPoultry(user.getId(), pulled.getName());
-        
-        int shopCurrencyGain = 0;
-        if (isDupe) {
-            shopCurrencyGain = gachaSystem.getDuplicateValue(pulled.getRarity());
-            userDAO.updateCurrency(user.getId(), -100, shopCurrencyGain);
-        } else {
-            userDAO.addToInventory(user.getId(), pulled);
-            userDAO.updateCurrency(user.getId(), -100, 0);
+        List<Poultry> pulledPoultries = new ArrayList<>();
+        List<Boolean> dupeResults = new ArrayList<>();
+        List<Integer> shopGains = new ArrayList<>();
+        int totalShopCurrencyGain = 0;
+
+        for (int i = 0; i < pullCount; i++) {
+            Poultry pulled = gachaSystem.pull();
+            boolean isDupe = userDAO.hasPoultry(user.getId(), pulled.getName());
+
+            int shopCurrencyGain = 0;
+            if (isDupe) {
+                shopCurrencyGain = gachaSystem.getDuplicateValue(pulled.getRarity());
+                totalShopCurrencyGain += shopCurrencyGain;
+            } else {
+                userDAO.addToInventory(user.getId(), pulled);
+            }
+
+            pulledPoultries.add(pulled);
+            dupeResults.add(isDupe);
+            shopGains.add(shopCurrencyGain);
         }
 
+        userDAO.updateCurrency(user.getId(), -cost, totalShopCurrencyGain);
+
         // Refresh user session data
-        user.setGachaCurrency(user.getGachaCurrency() - 100);
-        user.setShopCurrency(user.getShopCurrency() + shopCurrencyGain);
-        
-        request.setAttribute("pulledPoultry", pulled);
-        request.setAttribute("isDupe", isDupe);
-        request.setAttribute("shopGain", shopCurrencyGain);
+        user.setGachaCurrency(user.getGachaCurrency() - cost);
+        user.setShopCurrency(user.getShopCurrency() + totalShopCurrencyGain);
+
+        request.setAttribute("pulledPoultries", pulledPoultries);
+        request.setAttribute("dupeResults", dupeResults);
+        request.setAttribute("shopGains", shopGains);
+        request.setAttribute("totalShopGain", totalShopCurrencyGain);
+        request.setAttribute("pullCount", pullCount);
         request.getRequestDispatcher("gacha.jsp").forward(request, response);
+    }
+
+    private int getPullCount(HttpServletRequest request) {
+        String pullCount = request.getParameter("pullCount");
+        return "10".equals(pullCount) ? 10 : 1;
     }
 }

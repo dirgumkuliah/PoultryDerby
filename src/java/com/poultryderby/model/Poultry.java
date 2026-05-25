@@ -64,6 +64,23 @@ public abstract class Poultry implements Trainable {
         }
     }
 
+    protected int calculateIqEnergyGain() {
+        int currentIq = getIq();
+
+        if (currentIq <= 10) {
+            return interpolateIqEnergyGain(currentIq, 0, 10, GameConstants.MIN_IQ_ENERGY_GAIN, 7);
+        }
+        if (currentIq <= 25) {
+            return interpolateIqEnergyGain(currentIq, 10, 25, 7, 11);
+        }
+        return interpolateIqEnergyGain(currentIq, 25, GameConstants.MAX_IQ, 11, GameConstants.MAX_IQ_ENERGY_GAIN);
+    }
+
+    private int interpolateIqEnergyGain(int currentIq, int minIq, int maxIq, int minGain, int maxGain) {
+        double iqRatio = (double) (currentIq - minIq) / (maxIq - minIq);
+        return minGain + (int) Math.round((maxGain - minGain) * iqRatio);
+    }
+
     public abstract String getPrimaryStatName();
     public abstract int getPrimaryStatValue();
 }
