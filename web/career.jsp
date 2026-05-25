@@ -2,163 +2,136 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
-
-    <head>
-        <title>Career Mode</title>
-    </head>
-
-    <body class="bg-light">
-        <%@include file="header.jsp" %>
-        <div class="container">
-            <% CareerManager cm = (CareerManager) session.getAttribute("careerManager");
-                        if (cm == null) {
-                            response.sendRedirect("home.jsp");
-                            return;
-                        }%>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header bg-primary text-white">Poultry Stats</div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center">
-                                <%= cm.getPoultry().getName()%>
-                            </h5>
-                            <p class="text-muted text-center">
-                                <%= cm.getPoultry().getSpecies()%> (<%= cm.getPoultry().getRarity()%>)
-                            </p>
-                            <hr>
-                            <p><strong>Attack:</strong>
-                                <%= cm.getPoultry().getAttack()%>
-                                <span id="preview-attack" class="text-success fw-bold" style="display: none;"> +<%= cm.getPoultry().getExpectedAttackGain() %></span>
-                            </p>
-                            <p><strong>Speed:</strong>
-                                <%= cm.getPoultry().getSpeed()%>
-                                <span id="preview-speed" class="text-success fw-bold" style="display: none;"> +<%= cm.getPoultry().getExpectedSpeedGain() %></span>
-                            </p>
-                            <p><strong>IQ:</strong>
-                                <%= cm.getPoultry().getIq()%>
-                                <span id="preview-iq" class="text-success fw-bold" style="display: none;"> +<%= cm.getPoultry().getExpectedIqGain() %></span>
-                            </p>
-                            <div class="mb-2"><strong>Energy:</strong>
-                                <span id="preview-energy-cost" class="text-danger fw-bold" style="display: none;"></span>
-                            </div>
-                            <div class="progress mb-3">
-                                 <div class="progress-bar <%= cm.getPoultry().getEnergy() < 30 ? " bg-danger"
-                                                    : "bg-success"%>"
-                                 role="progressbar" style="width: <%= cm.getPoultry().getEnergy()%>%">
-                                    <%= cm.getPoultry().getEnergy()%>%
-                                </div>
-                            </div>
+<head>
+    <title>Poultry Derby - Career Mode</title>
+</head>
+<body>
+    <%@include file="header.jsp" %>
+    <div class="container py-5 fade-up">
+        <%
+            CareerManager cm = (CareerManager) session.getAttribute("careerManager");
+            if (cm == null) {
+                response.sendRedirect("home.jsp");
+                return;
+            }
+        %>
+        <div class="row g-4">
+            <div class="col-12 col-lg-4">
+                <div class="curved-card p-5">
+                    <div class="text-center mb-5">
+                        <div class="d-inline-flex p-4 rounded-circle bg-light text-primary fs-1 mb-4 shadow-sm">
+                            <i class="fas fa-award"></i>
                         </div>
+                        <h3 class="fw-bold text-dark mb-1"><%= cm.getPoultry().getName()%></h3>
+                        <p class="small text-muted"><%= cm.getPoultry().getSpecies()%> • <%= cm.getPoultry().getRarity()%></p>
                     </div>
-                </div>
 
-                <div class="col-md-8">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-dark text-white d-flex justify-content-between">
-                            <span>Year <%= cm.getYear()%></span>
-                            <span>Turn <%= cm.getYearTurn()%> / <%= cm.getMaxYear()%></span>
-                        </div>
-                        <div class="card-body text-center py-5">
-                            <% if (cm.isCareerOver()) {%>
-                            <h2 class="text-<%= cm.getOutcome().equals(" Win") ? "success" : "danger"%>
-                                ">
-                                Career Finished: <%= cm.getOutcome()%>!
-                            </h2>
-                            <p class="lead">Wins: <%= cm.getWins()%> | Boss Wins: <%= cm.getBossWins()%>
-                            </p>
-                            <a href="home.jsp" class="btn btn-primary">Return Home</a>
-                            <% } else { %>
-                            <h3>Select Action</h3>
-                            <div class="d-grid gap-3 col-6 mx-auto mt-4">
-                                <a href="career?action=turn&type=train_attack" id="btn-train-attack"
-                                   class="btn btn-outline-danger btn-lg position-relative">Train Attack
-                                   <span class="hover-info badge bg-danger" style="display:none; position:absolute; top:-10px; right:-10px; font-size:0.65rem;">Atk +<%= cm.getPoultry().getExpectedAttackGain() %> | Energy -20</span>
-                                </a>
-                                <a href="career?action=turn&type=train_speed" id="btn-train-speed"
-                                   class="btn btn-outline-info btn-lg position-relative">Train Speed
-                                   <span class="hover-info badge bg-info" style="display:none; position:absolute; top:-10px; right:-10px; font-size:0.65rem;">Spd +<%= cm.getPoultry().getExpectedSpeedGain() %> | Energy -20</span>
-                                </a>
-                                <a href="career?action=turn&type=train_iq" id="btn-train-iq"
-                                   class="btn btn-outline-warning btn-lg position-relative">Train IQ
-                                   <span class="hover-info badge bg-warning text-dark" style="display:none; position:absolute; top:-10px; right:-10px; font-size:0.65rem;">IQ +<%= cm.getPoultry().getExpectedIqGain() %> | Energy +Regen</span>
-                                </a>
-                                <a href="career?action=turn&type=rest" id="btn-rest"
-                                   class="btn btn-outline-success btn-lg position-relative">Rest (Restore Energy)
-                                   <span class="hover-info badge bg-success" style="display:none; position:absolute; top:-10px; right:-10px; font-size:0.65rem;">Energy +40</span>
-                                </a>
-                                <a href="career?action=turn&type=fight"
-                                   class="btn btn-dark btn-lg">Fight / Race</a>
+                    <div class="stats mt-5">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between small mb-2">
+                                <span class="fw-bold"><i class="fas fa-shield-alt me-1 text-primary"></i> Attack</span>
+                                <span class="fw-bold text-primary"><%= cm.getPoultry().getAttack()%> <span id="preview-attack" class="text-success" style="display:none"> +<%= cm.getPoultry().getExpectedAttackGain() %></span></span>
                             </div>
-                            <% }%>
+                            <div class="progress" style="height:6px; background: #f1f5f9; border-radius: 10px;">
+                                <div class="progress-bar" style="background: var(--blue-gradient); width: <%= (cm.getPoultry().getAttack() / 10.0) %>%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between small mb-2">
+                                <span class="fw-bold"><i class="fas fa-bolt me-1 text-primary"></i> Speed</span>
+                                <span class="fw-bold text-primary"><%= cm.getPoultry().getSpeed()%> <span id="preview-speed" class="text-success" style="display:none"> +<%= cm.getPoultry().getExpectedSpeedGain() %></span></span>
+                            </div>
+                            <div class="progress" style="height:6px; background: #f1f5f9; border-radius: 10px;">
+                                <div class="progress-bar" style="background: var(--blue-gradient); width: <%= (cm.getPoultry().getSpeed() / 10.0) %>%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between small mb-2">
+                                <span class="fw-bold"><i class="fas fa-brain me-1 text-primary"></i> IQ</span>
+                                <span class="fw-bold text-primary"><%= cm.getPoultry().getIq()%> <span id="preview-iq" class="text-success" style="display:none"> +<%= cm.getPoultry().getExpectedIqGain() %></span></span>
+                            </div>
+                            <div class="progress" style="height:6px; background: #f1f5f9; border-radius: 10px;">
+                                <div class="progress-bar" style="background: var(--blue-gradient); width: <%= (cm.getPoultry().getIq() / 10.0) %>%"></div>
+                            </div>
+                        </div>
+                        <div class="mt-5 pt-4 border-top border-light">
+                            <div class="d-flex justify-content-between small mb-2">
+                                <span class="fw-bold">Energy</span>
+                                <span class="fw-bold <%= cm.getPoultry().getEnergy() < 30 ? "text-danger" : "text-success" %>">
+                                    <%= cm.getPoultry().getEnergy()%>% <span id="preview-energy-cost" style="display:none"></span>
+                                </span>
+                            </div>
+                            <div class="progress" style="height:10px; background: #f1f5f9; border-radius: 10px;">
+                                <div class="progress-bar <%= cm.getPoultry().getEnergy() < 30 ? "bg-danger" : "bg-success" %>" style="width: <%= cm.getPoultry().getEnergy() %>%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="col-12 col-lg-8">
+                <div class="curved-card p-5">
+                    <div class="d-flex justify-content-between align-items-center mb-5 pb-3 border-bottom border-light">
+                        <span class="badge py-2 px-3 rounded-pill bg-light text-primary border border-primary">YEAR <%= cm.getYear()%></span>
+                        <div class="text-muted fw-bold">TURN: <%= cm.getYearTurn()%> / <%= cm.getMaxYear()%></div>
+                    </div>
+
+                    <div class="text-center py-4">
+                        <% if (cm.isCareerOver()) {%>
+                            <div class="py-5">
+                                <div class="mb-4 display-1 text-warning"><i class="fas fa-medal"></i></div>
+                                <h2 class="display-6 fw-bold mb-5 blue-gradient-text"><%= cm.getOutcome()%>!</h2>
+                                <p class="text-muted lead mb-5">Wins: <span class="text-dark fw-bold"><%= cm.getWins()%></span> | Boss Wins: <span class="text-dark fw-bold"><%= cm.getBossWins()%></span></p>
+                                <a href="home.jsp" class="btn-gradient px-5">Return Headquarters</a>
+                            </div>
+                        <% } else { %>
+                            <h4 class="fw-bold mb-5">Training Ground</h4>
+                            <div class="row g-4 justify-content-center">
+                                <div class="col-12 col-sm-6">
+                                    <a href="career?action=turn&type=train_attack" id="btn-train-attack" class="btn-outline-blue w-100 py-3">Train Attack</a>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <a href="career?action=turn&type=train_speed" id="btn-train-speed" class="btn-outline-blue w-100 py-3">Train Speed</a>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <a href="career?action=turn&type=train_iq" id="btn-train-iq" class="btn-outline-blue w-100 py-3">Train IQ</a>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <a href="career?action=turn&type=rest" id="btn-rest" class="btn-outline-blue w-100 py-3">Rest & Recover</a>
+                                </div>
+                                <div class="col-12 mt-5 pt-3">
+                                    <a href="career?action=turn&type=fight" class="btn-gradient w-100 py-3 fs-5">
+                                        <i class="fas fa-flag-checkered me-2"></i> ENTER COMPETITION
+                                    </a>
+                                </div>
+                            </div>
+                        <% }%>
+                    </div>
+                </div>
+            </div>
         </div>
-        <style>
-            .btn.position-relative .hover-info {
-                transition: opacity 0.25s ease, transform 0.25s ease;
-                opacity: 0;
-                transform: translateY(5px);
-                pointer-events: none;
+    </div>
+
+    <script>
+        function setupHover(btnId, previewId, energyText) {
+            const btn = document.getElementById(btnId);
+            const preview = document.getElementById(previewId);
+            const energyPreview = document.getElementById('preview-energy-cost');
+            if (btn && preview) {
+                btn.onmouseenter = () => {
+                    preview.style.display = 'inline';
+                    energyPreview.textContent = energyText;
+                    energyPreview.style.display = 'inline';
+                };
+                btn.onmouseleave = () => {
+                    preview.style.display = 'none';
+                    energyPreview.style.display = 'none';
+                };
             }
-            .btn.position-relative:hover .hover-info {
-                display: inline-block !important;
-                opacity: 1;
-                transform: translateY(0);
-            }
-            #preview-attack, #preview-speed, #preview-iq, #preview-energy-cost {
-                transition: opacity 0.3s ease;
-            }
-        </style>
-        <script>
-            // Fungsi untuk menyalakan dan mematikan efek preview stat + energy cost
-            function setupHoverEffect(buttonId, previewSpanId, energyCostText) {
-                const btn = document.getElementById(buttonId);
-                const preview = document.getElementById(previewSpanId);
-                const energyPreview = document.getElementById('preview-energy-cost');
-
-                if (btn && preview) {
-                    btn.addEventListener('mouseenter', function () {
-                        preview.style.display = 'inline';
-                        if (energyPreview && energyCostText) {
-                            energyPreview.textContent = energyCostText;
-                            energyPreview.style.display = 'inline';
-                        }
-                    });
-
-                    btn.addEventListener('mouseleave', function () {
-                        preview.style.display = 'none';
-                        if (energyPreview) {
-                            energyPreview.style.display = 'none';
-                        }
-                    });
-                }
-            }
-
-            // Terapkan fungsi ke masing-masing tombol dengan info energy cost
-            setupHoverEffect('btn-train-attack', 'preview-attack', ' -20');
-            setupHoverEffect('btn-train-speed', 'preview-speed', ' -20');
-            setupHoverEffect('btn-train-iq', 'preview-iq', ' +Regen');
-
-            // Setup hover untuk tombol rest (hanya energy preview)
-            (function() {
-                const restBtn = document.getElementById('btn-rest');
-                const energyPreview = document.getElementById('preview-energy-cost');
-                if (restBtn && energyPreview) {
-                    restBtn.addEventListener('mouseenter', function () {
-                        energyPreview.textContent = ' +40';
-                        energyPreview.className = 'text-success fw-bold';
-                        energyPreview.style.display = 'inline';
-                    });
-                    restBtn.addEventListener('mouseleave', function () {
-                        energyPreview.style.display = 'none';
-                        energyPreview.className = 'text-danger fw-bold';
-                    });
-                }
-            })();
-        </script>                     
-    </body>
-
+        }
+        setupHover('btn-train-attack', 'preview-attack', ' (-20)');
+        setupHover('btn-train-speed', 'preview-speed', ' (-20)');
+        setupHover('btn-train-iq', 'preview-iq', ' (+Regen)');
+    </script>
+</body>
 </html>
