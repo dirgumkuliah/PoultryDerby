@@ -23,6 +23,8 @@ public class GameConstants {
     public static final int IQ_TRAINING_MAX_ENERGY_GAIN = 17;
 
     // Currency Yields
+    public static final int GACHA_PULL_COST = 100;
+    public static final int GACHA_TEN_PULL_COST = 900;
     public static final int BASE_COMPLETION_CURRENCY = 25;
     public static final int BOSS_WIN_CURRENCY = 5;
     public static final int ENEMY_WIN_CURRENCY = 1;
