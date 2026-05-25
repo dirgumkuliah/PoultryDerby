@@ -18,7 +18,9 @@ public class GameConstants {
     public static final int BASE_TRAIN_IQ = 1;
     public static final int ENERGY_RESTORE = 40;
     public static final int TRAINING_ENERGY_COST = 20;
-    public static final int IQ_TRAINING_ENERGY_COST = 15;
+    public static final int IQ_TRAINING_ENERGY_COST = 0;
+    public static final int IQ_TRAINING_MIN_ENERGY_GAIN = 5;
+    public static final int IQ_TRAINING_MAX_ENERGY_GAIN = 17;
 
     // Currency Yields
     public static final int BASE_COMPLETION_CURRENCY = 25;

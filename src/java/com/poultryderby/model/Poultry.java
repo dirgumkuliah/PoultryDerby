@@ -64,6 +64,11 @@ public abstract class Poultry implements Trainable {
         }
     }
 
+    protected int calculateIQTrainingEnergyGain() {
+        int energyGainRange = GameConstants.IQ_TRAINING_MAX_ENERGY_GAIN - GameConstants.IQ_TRAINING_MIN_ENERGY_GAIN;
+        return GameConstants.IQ_TRAINING_MIN_ENERGY_GAIN + (this.iq * energyGainRange / GameConstants.MAX_IQ);
+    }
+
     public abstract String getPrimaryStatName();
     public abstract int getPrimaryStatValue();
 }

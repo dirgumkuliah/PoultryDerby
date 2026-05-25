@@ -31,7 +31,7 @@ public class Turkey extends Poultry {
         int baseYield = GameConstants.BASE_TRAIN_IQ;
         int change = calculateStatChange(baseYield, failed);
         setIq(this.iq + change);
-        setEnergy(this.energy - GameConstants.IQ_TRAINING_ENERGY_COST);
+        setEnergy(this.energy + calculateIQTrainingEnergyGain());
     }
 
     @Override
