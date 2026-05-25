@@ -92,4 +92,22 @@ public class CareerManager {
         if (currentTurn <= GameConstants.YEAR_1_TURNS + GameConstants.YEAR_2_TURNS) return 2;
         return 3;
     }
+    public int getYearTurn(){
+        if (currentTurn <= GameConstants.YEAR_1_TURNS){
+            return currentTurn;
+        }else if (currentTurn <= GameConstants.YEAR_1_TURNS + GameConstants.YEAR_2_TURNS){
+            return currentTurn - GameConstants.YEAR_1_TURNS;
+        }else{
+            return currentTurn - (GameConstants.YEAR_1_TURNS + GameConstants.YEAR_2_TURNS);
+        }
+    }
+    public int getMaxYear(){
+        if (currentTurn <= GameConstants.YEAR_1_TURNS){
+            return GameConstants.YEAR_1_TURNS;
+        }else if (currentTurn <= GameConstants.YEAR_1_TURNS + GameConstants.YEAR_2_TURNS){
+            return GameConstants.YEAR_2_TURNS;
+        }else{
+            return GameConstants.YEAR_3_TURNS;
+        }
+    }
 }

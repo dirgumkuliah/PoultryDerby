@@ -39,4 +39,19 @@ public class Turkey extends Poultry {
 
     @Override
     public int getPrimaryStatValue() { return getAttack(); }
+    
+    @Override
+    public int getExpectedAttackGain() {
+        return GameConstants.BASE_TRAIN_STAT + this.iq;
+    }
+
+    @Override
+    public int getExpectedSpeedGain() {
+        return GameConstants.BASE_TRAIN_STAT / 2 + this.iq;
+    }
+
+    @Override
+    public int getExpectedIqGain() {
+        return GameConstants.BASE_TRAIN_IQ;
+    }
 }

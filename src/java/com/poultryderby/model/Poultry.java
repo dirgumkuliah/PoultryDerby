@@ -83,4 +83,8 @@ public abstract class Poultry implements Trainable {
 
     public abstract String getPrimaryStatName();
     public abstract int getPrimaryStatValue();
+    
+    public abstract int getExpectedAttackGain();
+    public abstract int getExpectedSpeedGain();
+    public abstract int getExpectedIqGain();
 }
