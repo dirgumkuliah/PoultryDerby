@@ -1,0 +1,193 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+
+:root {
+    --bg-white: #ffffff;
+    --bg-blue-light: #f0f7ff;
+    --primary-blue: #0061ff;
+    --secondary-blue: #60efff;
+    --dark-blue: #002d72;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --shadow-main: 0 10px 40px rgba(0, 97, 255, 0.1);
+    --border-radius-lg: 30px;
+    --border-radius-md: 20px;
+    --blue-gradient: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: radial-gradient(
+        circle at top right,
+        var(--bg-blue-light),
+        var(--bg-white)
+    );
+    background-attachment: fixed;
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+/* Curved Navbar */
+.navbar-custom {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0, 97, 255, 0.1);
+    padding: 1.2rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+    background: var(--blue-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-link {
+    color: var(--text-muted) !important;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem !important;
+    transition: 0.3s;
+    border-radius: 50px;
+}
+
+.nav-link:hover {
+    color: var(--primary-blue) !important;
+    background: rgba(0, 97, 255, 0.05);
+}
+
+/* Curved Cards */
+.curved-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius-lg);
+    padding: 3.5rem;
+    box-shadow: var(--shadow-main);
+    border: 1px solid rgba(0, 97, 255, 0.05);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.curved-card:hover {
+    transform: translateY(-10px);
+}
+
+/* Gradient Buttons */
+.btn-gradient {
+    background: var(--blue-gradient);
+    color: white !important;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: 0.4s;
+    box-shadow: 0 10px 25px rgba(0, 97, 255, 0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-gradient:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 35px rgba(0, 97, 255, 0.4);
+    filter: brightness(1.05);
+}
+
+.btn-outline-blue {
+    background: transparent;
+    color: var(--primary-blue) !important;
+    border: 2px solid var(--primary-blue);
+    padding: 0.9rem 2.2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    transition: 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-outline-blue:hover {
+    background: var(--primary-blue);
+    color: white !important;
+}
+
+/* Forms */
+.form-label {
+    color: var(--dark-blue);
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-left: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.input-curved {
+    background: #f8fbff;
+    border: 2px solid #eef3f9;
+    padding: 1rem 1.5rem;
+    border-radius: 18px;
+    width: 100%;
+    outline: none;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.input-curved:focus {
+    border-color: var(--primary-blue);
+    background: white;
+    box-shadow: 0 0 0 5px rgba(0, 97, 255, 0.05);
+}
+
+/* Table */
+.table-rounded {
+    width: 100%;
+    border-spacing: 0 15px;
+    border-collapse: separate;
+}
+
+.table-rounded tr {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
+}
+
+.table-rounded td {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(0, 97, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 97, 255, 0.05);
+}
+
+.table-rounded td:first-child {
+    border-left: 1px solid rgba(0, 97, 255, 0.05);
+    border-radius: 20px 0 0 20px;
+}
+
+.table-rounded td:last-child {
+    border-right: 1px solid rgba(0, 97, 255, 0.05);
+    border-radius: 0 20px 20px 0;
+}
+
+@media (max-width: 768px) {
+    .curved-card {
+        padding: 2.5rem 1.5rem;
+    }
+}
+
+.fade-up {
+    animation: fadeUp 0.7s ease-out forwards;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
