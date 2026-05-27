@@ -28,10 +28,30 @@
                         </div>
                     </div>
                     <h4 class="fw-bold mb-1"><%= p.getName() %></h4>
-                    <p class="small text-muted mb-4"><%= p.getSpecies() %></p>
-                    <div class="mb-5 mt-auto">
+                    <p class="small text-muted mb-3"><%= p.getSpecies() %></p>
+                    <div class="mb-4">
                         <span class="badge rounded-pill bg-primary px-3 py-2"><%= p.getRarity() %></span>
                     </div>
+
+                    <div class="text-start mb-5 mt-auto p-3 rounded-4 bg-light">
+                        <div class="d-flex justify-content-between small mb-2">
+                            <span class="fw-bold"><i class="fas fa-shield-alt me-1 text-primary"></i>Attack</span>
+                            <span class="fw-bold text-primary"><%= p.getAttack() %></span>
+                        </div>
+                        <div class="d-flex justify-content-between small mb-2">
+                            <span class="fw-bold"><i class="fas fa-bolt me-1 text-primary"></i>Speed</span>
+                            <span class="fw-bold text-primary"><%= p.getSpeed() %></span>
+                        </div>
+                        <div class="d-flex justify-content-between small mb-2">
+                            <span class="fw-bold"><i class="fas fa-brain me-1 text-primary"></i>IQ</span>
+                            <span class="fw-bold text-primary"><%= p.getIq() %></span>
+                        </div>
+                        <div class="d-flex justify-content-between small">
+                            <span class="fw-bold"><i class="fas fa-battery-full me-1 text-success"></i>Energy</span>
+                            <span class="fw-bold text-success"><%= p.getEnergy() %>%</span>
+                        </div>
+                    </div>
+
                     <a href="career?action=start&poultryName=<%= p.getName() %>" class="btn-gradient w-100 py-3">Select</a>
                 </div>
             </div>

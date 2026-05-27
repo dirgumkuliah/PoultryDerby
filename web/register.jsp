@@ -12,19 +12,29 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-5 col-xl-4">
                 <div class="curved-card fade-up">
-                    <div class="text-center mb-5">
+                    <div class="text-center mb-4">
                         <h2 class="display-6 fw-bold mb-2 blue-gradient-text">Register</h2>
                         <p class="text-muted">Join the ultimate poultry derby</p>
+                    </div>
+
+                    <div class="alert border-0 rounded-4 small mb-4" style="background: rgba(59, 130, 246, 0.1); color: var(--primary-blue);">
+                        <div class="fw-bold mb-2"><i class="fas fa-circle-info me-2"></i>Ketentuan Register</div>
+                        <ul class="mb-0 ps-3">
+                            <li>Username wajib diisi dan harus unik.</li>
+                            <li>Password wajib diisi, minimal 8 karakter, dan harus mengandung angka.</li>
+                        </ul>
                     </div>
 
                     <form action="RegisterServlet" method="POST">
                         <div class="mb-4">
                             <label class="form-label">Username</label>
-                            <input type="text" name="username" class="input-curved" placeholder="Choose a username" required>
+                            <input type="text" name="username" class="input-curved" placeholder="Choose a username" maxlength="50" required>
+                            <div class="form-text small mt-2">Username belum pernah digunakan.</div>
                         </div>
                         <div class="mb-5">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="input-curved" placeholder="Choose a password" required>
+                            <input type="password" name="password" class="input-curved" placeholder="Choose a password" minlength="8" maxlength="255" pattern="(?=.*\d).{8,}" title="Password minimal 8 karakter dan harus mengandung angka" required>
+                            <div class="form-text small mt-2">Minimal 8 karakter dan harus ada angka.</div>
                         </div>
 
                         <button type="submit" class="btn-gradient w-100">
@@ -40,7 +50,7 @@
 
                         <% if (request.getParameter("error") != null) { %>
                             <div class="alert alert-danger mt-4 border-0 rounded-4 small py-2 text-center" style="background: rgba(239, 68, 68, 0.1); color: #dc2626;">
-                                Register failed!
+                                Register failed! Pastikan username belum dipakai dan data sesuai ketentuan.
                             </div>
                         <% } %>
                     </form>

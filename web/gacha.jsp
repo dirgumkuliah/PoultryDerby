@@ -39,13 +39,22 @@
                     <% if (request.getAttribute("pulledPoultries") != null) {
                         List<Poultry> pulledPoultries = (List<Poultry>) request.getAttribute("pulledPoultries");
                         List<Boolean> dupeResults = (List<Boolean>) request.getAttribute("dupeResults");
+                        List<Integer> shopGains = (List<Integer>) request.getAttribute("shopGains");
+                        int totalShopGain = request.getAttribute("totalShopGain") != null ? (Integer) request.getAttribute("totalShopGain") : 0;
                     %>
                         <div class="mt-5 text-start p-4 rounded-4" style="background: #fafafa; border: 2px solid #f1f5f9;">
-                            <h4 class="mb-4 text-center fw-bold">Gacha Results</h4>
+                            <h4 class="mb-2 text-center fw-bold">Gacha Results</h4>
+                            <p class="text-center text-muted small mb-4">Duplicate poultry will be converted into Shop Currency.</p>
+                            <% if (totalShopGain > 0) { %>
+                                <div class="alert alert-success border-0 rounded-4 text-center fw-bold mb-4">
+                                    <i class="fas fa-shopping-bag me-2"></i>You gained <%= totalShopGain %> Shop Currency from duplicates!
+                                </div>
+                            <% } %>
                             <div class="row g-3">
                                 <% for (int i = 0; i < pulledPoultries.size(); i++) {
                                     Poultry p = pulledPoultries.get(i);
                                     boolean isDupe = dupeResults.get(i);
+                                    int shopGain = shopGains != null ? shopGains.get(i) : 0;
                                 %>
                                     <div class="col-12 col-md-6 col-lg-4">
                                         <div class="p-3 border rounded-3 bg-white">
@@ -54,7 +63,7 @@
                                                 <span class="badge bg-primary rounded-pill"><%= p.getRarity() %></span>
                                             </div>
                                             <% if (isDupe) { %>
-                                                <p class="text-danger mb-0 small">Duplicate found!</p>
+                                                <p class="text-danger mb-0 small">Duplicate found! Converted to <%= shopGain %> Shop Currency.</p>
                                             <% } else { %>
                                                 <p class="text-success mb-0 small">New poultry entry!</p>
                                             <% } %>

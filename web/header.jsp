@@ -20,6 +20,7 @@
             <ul class="navbar-nav ms-auto align-items-center gap-2">
                 <li class="nav-item"><a class="nav-link" href="home.jsp">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="gacha.jsp">Gacha</a></li>
+                <li class="nav-item"><a class="nav-link" href="shop">Shop</a></li>
                 <li class="nav-item"><a class="nav-link" href="history">History</a></li>
                 <li class="nav-item ms-lg-3">
                     <div class="d-flex align-items-center gap-3 p-2 px-4 rounded-pill bg-light border">

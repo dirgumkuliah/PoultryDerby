@@ -25,6 +25,9 @@
                         <a href="gacha.jsp" class="btn-outline-blue">
                             <i class="fas fa-star me-2"></i> Pull Gacha
                         </a>
+                        <a href="shop" class="btn-outline-blue">
+                            <i class="fas fa-shopping-bag me-2"></i> Open Shop
+                        </a>
                     </div>
                 </div>
             </div>

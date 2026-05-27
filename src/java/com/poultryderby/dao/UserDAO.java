@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
+    public static final int BUY_SUCCESS = 1;
+    public static final int BUY_INSUFFICIENT_CURRENCY = 2;
+    public static final int BUY_DUPLICATE = 3;
+    public static final int BUY_FAILED = 4;
+
     public UserBean login(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -73,7 +78,68 @@ public class UserDAO {
         }
         return false;
     }
-    public List<Poultry> getUserInventory(int userId) { 
+
+    public int buyPoultry(int userId, Poultry poultry, int price) {
+        String checkCurrencySql = "SELECT shop_currency FROM users WHERE id = ? FOR UPDATE";
+        String checkDuplicateSql = "SELECT id FROM inventory WHERE user_id = ? AND name = ?";
+        String insertInventorySql = "INSERT INTO inventory (user_id, species, name, rarity) VALUES (?, ?, ?, ?)";
+        String updateCurrencySql = "UPDATE users SET shop_currency = shop_currency - ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement checkCurrency = conn.prepareStatement(checkCurrencySql)) {
+                checkCurrency.setInt(1, userId);
+                ResultSet currencyResult = checkCurrency.executeQuery();
+
+                if (!currencyResult.next() || currencyResult.getInt("shop_currency") < price) {
+                    conn.rollback();
+                    return BUY_INSUFFICIENT_CURRENCY;
+                }
+            }
+
+            try (PreparedStatement checkDuplicate = conn.prepareStatement(checkDuplicateSql)) {
+                checkDuplicate.setInt(1, userId);
+                checkDuplicate.setString(2, poultry.getName());
+                ResultSet duplicateResult = checkDuplicate.executeQuery();
+
+                if (duplicateResult.next()) {
+                    conn.rollback();
+                    return BUY_DUPLICATE;
+                }
+            }
+
+            try (PreparedStatement insertInventory = conn.prepareStatement(insertInventorySql);
+                 PreparedStatement updateCurrency = conn.prepareStatement(updateCurrencySql)) {
+                insertInventory.setInt(1, userId);
+                insertInventory.setString(2, poultry.getSpecies());
+                insertInventory.setString(3, poultry.getName());
+                insertInventory.setString(4, poultry.getRarity());
+
+                updateCurrency.setInt(1, price);
+                updateCurrency.setInt(2, userId);
+
+                int inserted = insertInventory.executeUpdate();
+                int updated = updateCurrency.executeUpdate();
+
+                if (inserted > 0 && updated > 0) {
+                    conn.commit();
+                    return BUY_SUCCESS;
+                }
+
+                conn.rollback();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return BUY_FAILED;
+    }
+
+    public List<Poultry> getUserInventory(int userId) {
         List<Poultry> list = new ArrayList<>();
         String sql = "SELECT * FROM inventory WHERE user_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -113,7 +179,7 @@ public class UserDAO {
         }
         return null;
     }
-    
+
     public boolean register(UserBean user) {
 
     boolean success = false;
@@ -143,5 +209,5 @@ public class UserDAO {
     }
 
     return success;
-    }   
+    }
 }

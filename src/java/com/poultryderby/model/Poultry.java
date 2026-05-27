@@ -17,10 +17,56 @@ public abstract class Poultry implements Trainable {
         this.name = name;
         this.species = species;
         this.rarity = rarity;
-        this.attack = 0;
-        this.speed = 0;
-        this.iq = 0;
+        initializeBaseStats();
         this.energy = GameConstants.MAX_ENERGY;
+    }
+
+    private void initializeBaseStats() {
+        int baseAttack;
+        int baseSpeed;
+        int baseIq;
+
+        switch (rarity) {
+            case "Rare":
+                baseAttack = 50;
+                baseSpeed = 50;
+                baseIq = 3;
+                break;
+            case "Legend":
+                baseAttack = 120;
+                baseSpeed = 120;
+                baseIq = 8;
+                break;
+            case "Secret":
+                baseAttack = 220;
+                baseSpeed = 220;
+                baseIq = 15;
+                break;
+            case "Hack":
+                baseAttack = 450;
+                baseSpeed = 450;
+                baseIq = 30;
+                break;
+            case "Common":
+            default:
+                baseAttack = 20;
+                baseSpeed = 20;
+                baseIq = 1;
+                break;
+        }
+
+        if ("Turkey".equals(species)) {
+            this.attack = (int) Math.round(baseAttack * 1.25);
+            this.speed = (int) Math.round(baseSpeed * 0.85);
+        } else if ("Pheasant".equals(species)) {
+            this.attack = (int) Math.round(baseAttack * 0.85);
+            this.speed = (int) Math.round(baseSpeed * 1.25);
+        } else {
+            this.attack = baseAttack;
+            this.speed = baseSpeed;
+        }
+
+        this.iq = baseIq;
     }
 
     // Getters
@@ -45,7 +91,7 @@ public abstract class Poultry implements Trainable {
 
     protected boolean checkFailure() {
         if (energy >= 50) return false;
-        
+
         // Scaling failure rate: 50 energy -> 0%, 0 energy -> 99%
         double failureRate = (50.0 - energy) / 50.0 * 0.99;
         return random.nextDouble() < failureRate;
@@ -83,7 +129,7 @@ public abstract class Poultry implements Trainable {
 
     public abstract String getPrimaryStatName();
     public abstract int getPrimaryStatValue();
-    
+
     public abstract int getExpectedAttackGain();
     public abstract int getExpectedSpeedGain();
     public abstract int getExpectedIqGain();
