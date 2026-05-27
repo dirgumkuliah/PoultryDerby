@@ -1,5 +1,11 @@
 <%@page import="java.util.Set"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    if (request.getAttribute("ownedPoultryNames") == null && request.getRequestURI().endsWith("shop.jsp")) {
+        response.sendRedirect("shop");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>

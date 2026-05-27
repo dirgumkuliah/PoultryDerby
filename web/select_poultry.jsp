@@ -1,3 +1,5 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="java.nio.charset.StandardCharsets"%>
 <%@page import="java.util.List"%>
 <%@page import="com.poultryderby.model.Poultry"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -52,7 +54,7 @@
                         </div>
                     </div>
 
-                    <a href="career?action=start&poultryName=<%= p.getName() %>" class="btn-gradient w-100 py-3">Select</a>
+                    <a href="career?action=start&poultryName=<%= URLEncoder.encode(p.getName(), StandardCharsets.UTF_8.toString()) %>" class="btn-gradient w-100 py-3">Select</a>
                 </div>
             </div>
             <%      }
