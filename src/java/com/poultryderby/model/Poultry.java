@@ -56,17 +56,17 @@ public abstract class Poultry implements Trainable {
         }
 
         if ("Turkey".equals(species)) {
-            this.attack = (int) Math.round(baseAttack * 1.25);
-            this.speed = (int) Math.round(baseSpeed * 0.85);
+            setAttack((int) Math.round(baseAttack * 1.25));
+            setSpeed((int) Math.round(baseSpeed * 0.85));
         } else if ("Pheasant".equals(species)) {
-            this.attack = (int) Math.round(baseAttack * 0.85);
-            this.speed = (int) Math.round(baseSpeed * 1.25);
+            setAttack((int) Math.round(baseAttack * 0.85));
+            setSpeed((int) Math.round(baseSpeed * 1.25));
         } else {
-            this.attack = baseAttack;
-            this.speed = baseSpeed;
+            setAttack(baseAttack);
+            setSpeed(baseSpeed);
         }
 
-        this.iq = baseIq;
+        setIq(baseIq);
     }
 
     // Getters

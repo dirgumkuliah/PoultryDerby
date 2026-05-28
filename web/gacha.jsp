@@ -55,18 +55,29 @@
                                     Poultry p = pulledPoultries.get(i);
                                     boolean isDupe = dupeResults.get(i);
                                     int shopGain = shopGains != null ? shopGains.get(i) : 0;
+
+                                    String fileName = p.getName().equalsIgnoreCase("Midget White Turkey") ? "turkey_default.png" :
+                                                   p.getSpecies().toLowerCase() + "_" + p.getRarity().toLowerCase() + ".png";
                                 %>
                                     <div class="col-12 col-md-6 col-lg-4">
-                                        <div class="p-3 border rounded-3 bg-white">
-                                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <span class="fw-bold"><%= p.getName() %></span>
-                                                <span class="badge bg-primary rounded-pill"><%= p.getRarity() %></span>
+                                        <div class="p-3 border rounded-3 bg-white d-flex align-items-center gap-3">
+                                            <div class="rounded-circle bg-light shadow-sm overflow-hidden flex-shrink-0" style="width: 45px; height: 45px;">
+                                                <img src="assets/poultry/<%= fileName %>"
+                                                     alt="<%= p.getSpecies() %>"
+                                                     style="width: 100%; height: 100%; object-fit: cover;"
+                                                     onerror="this.src='https://ui-avatars.com/api/?name=<%= p.getSpecies() %>&background=random'">
                                             </div>
-                                            <% if (isDupe) { %>
-                                                <p class="text-danger mb-0 small">Duplicate found! Converted to <%= shopGain %> Shop Currency.</p>
-                                            <% } else { %>
-                                                <p class="text-success mb-0 small">New poultry entry!</p>
-                                            <% } %>
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <span class="fw-bold small"><%= p.getName() %></span>
+                                                    <span class="badge bg-primary rounded-pill" style="font-size: 0.65rem;"><%= p.getRarity() %></span>
+                                                </div>
+                                                <% if (isDupe) { %>
+                                                    <p class="text-danger mb-0" style="font-size: 0.75rem;">Converted to <%= shopGain %> Shop Currency.</p>
+                                                <% } else { %>
+                                                    <p class="text-success mb-0" style="font-size: 0.75rem;">New poultry entry!</p>
+                                                <% } %>
+                                            </div>
                                         </div>
                                     </div>
                                 <% } %>

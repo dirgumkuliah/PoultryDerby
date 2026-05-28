@@ -55,18 +55,19 @@
                 Set<String> ownedPoultryNames = (Set<String>) request.getAttribute("ownedPoultryNames");
 
                 String[][] items = {
-                    {"legend_turkey", "Bourbon Red Turkey", "Turkey", "Legend", "200", "fas fa-feather"},
-                    {"legend_pheasant", "Himalayan Moral Pheasant", "Pheasant", "Legend", "200", "fas fa-dove"},
-                    {"legend_duck", "Madagascar Pochard Duck", "Duck", "Legend", "200", "fas fa-water"},
-                    {"secret_turkey", "Bronze Turkey", "Turkey", "Secret", "750", "fas fa-feather-alt"},
-                    {"secret_pheasant", "Crested Argus Pheasant", "Pheasant", "Secret", "750", "fas fa-crow"},
-                    {"secret_duck", "Mergus Serrator Duck", "Duck", "Secret", "750", "fas fa-water"},
-                    {"hack_turkey", "Silver Auburn Turkey", "Turkey", "Hack", "3000", "fas fa-fire"},
-                    {"hack_pheasant", "Bornean Peacock Pheasant", "Pheasant", "Hack", "3000", "fas fa-bolt"},
-                    {"hack_duck", "Donald Duck", "Duck", "Hack", "3000", "fas fa-crown"}
+                    {"legend_turkey", "Bourbon Red Turkey", "Turkey", "Legend", "200"},
+                    {"legend_pheasant", "Himalayan Moral Pheasant", "Pheasant", "Legend", "200"},
+                    {"legend_duck", "Madagascar Pochard Duck", "Duck", "Legend", "200"},
+                    {"secret_turkey", "Bronze Turkey", "Turkey", "Secret", "750"},
+                    {"secret_pheasant", "Crested Argus Pheasant", "Pheasant", "Secret", "750"},
+                    {"secret_duck", "Mergus Serrator Duck", "Duck", "Secret", "750"},
+                    {"hack_turkey", "Silver Auburn Turkey", "Turkey", "Hack", "3000"},
+                    {"hack_pheasant", "Bornean Peacock Pheasant", "Pheasant", "Hack", "3000"},
+                    {"hack_duck", "Donald Duck", "Duck", "Hack", "3000"}
                 };
 
                 for (String[] item : items) {
+                    String species = item[2];
                     String rarity = item[3];
                     String badgeClass = "Legend".equals(rarity) ? "bg-warning text-dark" : ("Secret".equals(rarity) ? "bg-dark" : "bg-danger");
                     int price = Integer.parseInt(item[4]);
@@ -76,8 +77,11 @@
                 <div class="col-12 col-md-6 col-xl-4">
                     <div class="curved-card h-100 p-4 d-flex flex-column transition-all">
                         <div class="d-flex justify-content-between align-items-start mb-4">
-                            <div class="d-inline-flex p-3 rounded-circle bg-light text-primary fs-3 shadow-sm">
-                                <i class="<%= item[5] %>"></i>
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-light shadow-sm overflow-hidden" style="width: 80px; height: 80px;">
+                                <img src="assets/poultry/<%= species.toLowerCase() %>_<%= rarity.toLowerCase() %>.png"
+                                     alt="<%= species %>"
+                                     style="width: 100%; height: 100%; object-fit: cover;"
+                                     onerror="this.src='https://ui-avatars.com/api/?name=<%= species %>&background=random'">
                             </div>
                             <span class="badge rounded-pill <%= badgeClass %> px-3 py-2"><%= rarity %></span>
                         </div>

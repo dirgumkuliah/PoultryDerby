@@ -25,11 +25,19 @@
             <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                 <div class="curved-card text-center p-5 h-100 d-flex flex-column transition-all">
                     <div class="mb-4">
-                        <div class="d-inline-flex p-4 rounded-circle bg-light text-primary fs-2 shadow-sm">
-                            <i class="fas fa-certificate"></i>
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-light shadow-sm overflow-hidden" style="width: 80px; height: 80px; margin: 0 auto;">
+                            <%
+                                String fileName = p.getName().equalsIgnoreCase("Midget White Turkey") ? "turkey_default.png" :
+                                               p.getSpecies().toLowerCase() + "_" + p.getRarity().toLowerCase() + ".png";
+                            %>
+                            <img src="assets/poultry/<%= fileName %>"
+                                 alt="<%= p.getSpecies() %>"
+                                 style="width: 100%; height: 100%; object-fit: cover;"
+                                 onerror="this.src='https://ui-avatars.com/api/?name=<%= p.getSpecies() %>&background=random'">
                         </div>
                     </div>
                     <h4 class="fw-bold mb-1"><%= p.getName() %></h4>
+
                     <p class="small text-muted mb-3"><%= p.getSpecies() %></p>
                     <div class="mb-4">
                         <span class="badge rounded-pill bg-primary px-3 py-2"><%= p.getRarity() %></span>
