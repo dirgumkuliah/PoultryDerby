@@ -21,7 +21,6 @@ public class CareerManager {
     public void processTurn(String action) {
         if (careerOver) return;
 
-<<<<<<< Updated upstream
         boolean turnAdvanced = false;
 
         if (isBossTurn()) {
@@ -31,14 +30,32 @@ public class CareerManager {
                 turnAdvanced = true;
             } else if ("rest".equals(action)) {
                 poultry.rest();
-                // Stay on boss turn to ensure it's mandatory
+                // turnAdvanced remains false to stay on the boss turn
             }
         } else {
             switch (action) {
-                case "train_attack": poultry.trainAttack(); turnAdvanced = true; break;
-                case "train_speed": poultry.trainSpeed(); turnAdvanced = true; break;
-                case "train_iq": poultry.trainIQ(); turnAdvanced = true; break;
-                case "rest": poultry.rest(); turnAdvanced = true; break;
+                case "train_attack":
+                    if (poultry.canTrainAttack()) {
+                        poultry.trainAttack();
+                        turnAdvanced = true;
+                    }
+                    break;
+                case "train_speed":
+                    if (poultry.canTrainSpeed()) {
+                        poultry.trainSpeed();
+                        turnAdvanced = true;
+                    }
+                    break;
+                case "train_iq":
+                    if (poultry.canTrainIQ()) {
+                        poultry.trainIQ();
+                        turnAdvanced = true;
+                    }
+                    break;
+                case "rest":
+                    poultry.rest();
+                    turnAdvanced = true;
+                    break;
                 case "fight":
                 case "race":
                     if (canCompete() && poultry.getEnergy() >= GameConstants.COMPETITION_ENERGY_COST) {
@@ -48,28 +65,6 @@ public class CareerManager {
                     }
                     break;
             }
-=======
-        switch (action) {
-            case "train_attack":
-                if (!poultry.canTrainAttack()) return;
-                poultry.trainAttack();
-                break;
-            case "train_speed":
-                if (!poultry.canTrainSpeed()) return;
-                poultry.trainSpeed();
-                break;
-            case "train_iq":
-                if (!poultry.canTrainIQ()) return;
-                poultry.trainIQ();
-                break;
-            case "rest": poultry.rest(); break;
-            case "fight":
-            case "race":
-                handleStandardEncounter();
-                break;
-            default:
-                return;
->>>>>>> Stashed changes
         }
 
         if (turnAdvanced && !careerOver) {

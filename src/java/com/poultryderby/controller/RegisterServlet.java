@@ -44,7 +44,7 @@ public class RegisterServlet extends HttpServlet {
 
             System.out.println("REGISTER BERHASIL");
 
-            response.sendRedirect("index.jsp?success=1\"");
+            response.sendRedirect("index.jsp?success=1");
 
         } else {
 

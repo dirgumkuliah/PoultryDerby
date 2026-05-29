@@ -110,7 +110,6 @@ public abstract class Poultry implements Trainable {
         }
     }
 
-<<<<<<< Updated upstream
     protected int calculateIqEnergyGain() {
         int currentIq = getIq();
 
@@ -126,7 +125,7 @@ public abstract class Poultry implements Trainable {
     private int interpolateIqEnergyGain(int currentIq, int minIq, int maxIq, int minGain, int maxGain) {
         double iqRatio = (double) (currentIq - minIq) / (maxIq - minIq);
         return minGain + (int) Math.round((maxGain - minGain) * iqRatio);
-=======
+    }
     public boolean canTrainAttack() {
         return true;
     }
@@ -137,7 +136,6 @@ public abstract class Poultry implements Trainable {
 
     public boolean canTrainIQ() {
         return true;
->>>>>>> Stashed changes
     }
 
     public abstract String getPrimaryStatName();
