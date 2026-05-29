@@ -24,6 +24,13 @@ public class RegisterServlet extends HttpServlet {
         System.out.println(username);
         System.out.println(password);
 
+        if (username == null || username.trim().isEmpty()
+                || password == null || password.length() < 8 || !password.matches(".*\\d.*")) {
+            System.out.println("REGISTER GAGAL: DATA TIDAK SESUAI KETENTUAN");
+            response.sendRedirect("register.jsp?error=1");
+            return;
+        }
+
         UserBean user = new UserBean();
 
         user.setUsername(username);

@@ -1,92 +1,62 @@
-<%-- 
-    Document   : register
-    Created on : May 12, 2026, 7:04:34 PM
-    Author     : Bar
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Poultry Derby - Register</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            background: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        .register-card {
-            width: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            background: white;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+<body class="d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-5 col-xl-4">
+                <div class="curved-card fade-up">
+                    <div class="text-center mb-4">
+                        <h2 class="display-6 fw-bold mb-2 blue-gradient-text">Register</h2>
+                        <p class="text-muted">Join the ultimate poultry derby</p>
+                    </div>
 
-<body>
+                    <div class="alert border-0 rounded-4 small mb-4" style="background: rgba(59, 130, 246, 0.1); color: var(--primary-blue);">
+                        <div class="fw-bold mb-2"><i class="fas fa-circle-info me-2"></i>Ketentuan Register</div>
+                        <ul class="mb-0 ps-3">
+                            <li>Username wajib diisi dan harus unik.</li>
+                            <li>Password wajib diisi, minimal 8 karakter, dan harus mengandung angka.</li>
+                        </ul>
+                    </div>
 
-    <div class="register-card">
+                    <form action="RegisterServlet" method="POST">
+                        <div class="mb-4">
+                            <label class="form-label">Username</label>
+                            <input type="text" name="username" class="input-curved" placeholder="Choose a username" maxlength="50" required>
+                            <div class="form-text small mt-2">Username belum pernah digunakan.</div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="input-curved" placeholder="Choose a password" minlength="8" maxlength="255" pattern="(?=.*\d).{8,}" title="Password minimal 8 karakter dan harus mengandung angka" required>
+                            <div class="form-text small mt-2">Minimal 8 karakter dan harus ada angka.</div>
+                        </div>
 
-        <h2 class="text-center mb-4">
-            Poultry Derby
-        </h2>
+                        <button type="submit" class="btn-gradient w-100">
+                            Create Account <i class="fas fa-user-plus ms-2 small"></i>
+                        </button>
 
-        <form action="RegisterServlet" method="POST">
+                        <div class="text-center mt-5">
+                            <p class="mb-0 text-muted small">
+                                Already have an account?
+                                <a href="index.jsp" class="fw-bold text-decoration-none" style="color: var(--primary-blue)">Login here</a>
+                            </p>
+                        </div>
 
-            <div class="mb-3">
-                <label class="form-label">
-                    Username
-                </label>
-
-                <input type="text"
-                       name="username"
-                       class="form-control"
-                       required>
+                        <% if (request.getParameter("error") != null) { %>
+                            <div class="alert alert-danger mt-4 border-0 rounded-4 small py-2 text-center" style="background: rgba(239, 68, 68, 0.1); color: #dc2626;">
+                                Register failed! Pastikan username belum dipakai dan data sesuai ketentuan.
+                            </div>
+                        <% } %>
+                    </form>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">
-                    Password
-                </label>
-
-                <input type="password"
-                       name="password"
-                       class="form-control"
-                       required>
-            </div>
-
-            <button type="submit"
-                    class="btn btn-primary w-100">
-                Register
-            </button>
-
-            <div class="text-center mt-3">
-                <p class="mb-0">
-                    Sudah punya akun?
-                    <a href="index.jsp">
-                        Login
-                    </a>
-                </p>
-            </div>
-
-            <% if (request.getParameter("error") != null) { %>
-                <p class="text-danger mt-2 text-center">
-                    Register gagal!
-                </p>
-            <% } %>
-
-        </form>
-
+        </div>
     </div>
-
 </body>
 </html>

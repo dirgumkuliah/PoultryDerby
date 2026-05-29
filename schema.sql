@@ -19,8 +19,18 @@ CREATE TABLE IF NOT EXISTS inventory (
     species ENUM('Turkey', 'Pheasant', 'Duck') NOT NULL,
     name VARCHAR(50) NOT NULL,
     rarity ENUM('Common', 'Rare', 'Legend', 'Secret', 'Hack') NOT NULL,
+    attack INT NOT NULL DEFAULT 0,
+    speed INT NOT NULL DEFAULT 0,
+    iq INT NOT NULL DEFAULT 0,
+    energy INT NOT NULL DEFAULT 100,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- Migration for existing databases that already had the inventory table
+ALTER TABLE inventory ADD COLUMN IF NOT EXISTS attack INT NOT NULL DEFAULT 0;
+ALTER TABLE inventory ADD COLUMN IF NOT EXISTS speed INT NOT NULL DEFAULT 0;
+ALTER TABLE inventory ADD COLUMN IF NOT EXISTS iq INT NOT NULL DEFAULT 0;
+ALTER TABLE inventory ADD COLUMN IF NOT EXISTS energy INT NOT NULL DEFAULT 100;
 
 -- Career History / Log
 CREATE TABLE IF NOT EXISTS career_history (

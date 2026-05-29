@@ -2,8 +2,8 @@ package com.poultryderby.util;
 
 public class GameConstants {
     // Stat Limits
-    public static final int MAX_ATTACK = 1500;
-    public static final int MAX_SPEED = 1500;
+    public static final int MAX_ATTACK = 1000;
+    public static final int MAX_SPEED = 1000;
     public static final int MAX_IQ = 50;
     public static final int MAX_ENERGY = 100;
 
@@ -18,7 +18,8 @@ public class GameConstants {
     public static final int BASE_TRAIN_IQ = 1;
     public static final int ENERGY_RESTORE = 40;
     public static final int TRAINING_ENERGY_COST = 20;
-    public static final int IQ_TRAINING_ENERGY_COST = 15;
+    public static final int MIN_IQ_ENERGY_GAIN = 5;
+    public static final int MAX_IQ_ENERGY_GAIN = 17;
 
     // Currency Yields
     public static final int BASE_COMPLETION_CURRENCY = 25;
@@ -38,4 +39,24 @@ public class GameConstants {
     public static final int DUPE_LEGEND = 50;
     public static final int DUPE_SECRET = 100;
     public static final int DUPE_HACK = 1000;
+
+    // Competition Stats
+    public static final int ENEMY_STAT_Y1 = 150;
+    public static final int ENEMY_STAT_Y2 = 400;
+    public static final int ENEMY_STAT_Y3 = 650;
+
+    public static final int BOSS_STAT_Y1 = 250;
+    public static final int BOSS_STAT_Y2 = 500;
+    public static final int BOSS_STAT_Y3 = 750;
+
+    // Competition Rewards (Attack & Speed)
+    public static final int REWARD_NORMAL_Y1 = 50;
+    public static final int REWARD_NORMAL_Y2 = 75;
+    public static final int REWARD_NORMAL_Y3 = 100;
+
+    public static final int REWARD_BOSS_Y1 = 75;
+    public static final int REWARD_BOSS_Y2 = 100;
+    public static final int REWARD_BOSS_Y3 = 125;
+
+    public static final int COMPETITION_ENERGY_COST = 60;
 }

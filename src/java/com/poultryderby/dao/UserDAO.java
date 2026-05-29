@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
+    public static final int BUY_SUCCESS = 1;
+    public static final int BUY_INSUFFICIENT_CURRENCY = 2;
+    public static final int BUY_DUPLICATE = 3;
+    public static final int BUY_FAILED = 4;
+
     public UserBean login(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -32,14 +37,15 @@ public class UserDAO {
     }
 
     public boolean addToInventory(int userId, Poultry poultry) {
-        String sql = "INSERT INTO inventory (user_id, species, name, rarity) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, userId);
-            ps.setString(2, poultry.getSpecies());
-            ps.setString(3, poultry.getName());
-            ps.setString(4, poultry.getRarity());
-            return ps.executeUpdate() > 0;
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            String sql = hasInventoryStatColumns(conn)
+                    ? "INSERT INTO inventory (user_id, species, name, rarity, attack, speed, iq, energy) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                    : "INSERT INTO inventory (user_id, species, name, rarity) VALUES (?, ?, ?, ?)";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                setInventoryInsertParams(ps, userId, poultry, hasInventoryStatColumns(conn));
+                return ps.executeUpdate() > 0;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -73,7 +79,68 @@ public class UserDAO {
         }
         return false;
     }
-    public List<Poultry> getUserInventory(int userId) { 
+
+    public int buyPoultry(int userId, Poultry poultry, int price) {
+        String checkCurrencySql = "SELECT shop_currency FROM users WHERE id = ? FOR UPDATE";
+        String checkDuplicateSql = "SELECT id FROM inventory WHERE user_id = ? AND name = ?";
+        String updateCurrencySql = "UPDATE users SET shop_currency = shop_currency - ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            conn.setAutoCommit(false);
+            boolean hasStatColumns = hasInventoryStatColumns(conn);
+            String insertInventorySql = hasStatColumns
+                    ? "INSERT INTO inventory (user_id, species, name, rarity, attack, speed, iq, energy) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                    : "INSERT INTO inventory (user_id, species, name, rarity) VALUES (?, ?, ?, ?)";
+
+            try (PreparedStatement checkCurrency = conn.prepareStatement(checkCurrencySql)) {
+                checkCurrency.setInt(1, userId);
+                ResultSet currencyResult = checkCurrency.executeQuery();
+
+                if (!currencyResult.next() || currencyResult.getInt("shop_currency") < price) {
+                    conn.rollback();
+                    return BUY_INSUFFICIENT_CURRENCY;
+                }
+            }
+
+            try (PreparedStatement checkDuplicate = conn.prepareStatement(checkDuplicateSql)) {
+                checkDuplicate.setInt(1, userId);
+                checkDuplicate.setString(2, poultry.getName());
+                ResultSet duplicateResult = checkDuplicate.executeQuery();
+
+                if (duplicateResult.next()) {
+                    conn.rollback();
+                    return BUY_DUPLICATE;
+                }
+            }
+
+            try (PreparedStatement insertInventory = conn.prepareStatement(insertInventorySql);
+                 PreparedStatement updateCurrency = conn.prepareStatement(updateCurrencySql)) {
+                setInventoryInsertParams(insertInventory, userId, poultry, hasStatColumns);
+
+                updateCurrency.setInt(1, price);
+                updateCurrency.setInt(2, userId);
+
+                int inserted = insertInventory.executeUpdate();
+                int updated = updateCurrency.executeUpdate();
+
+                if (inserted > 0 && updated > 0) {
+                    conn.commit();
+                    return BUY_SUCCESS;
+                }
+
+                conn.rollback();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return BUY_FAILED;
+    }
+
+    public List<Poultry> getUserInventory(int userId) {
         List<Poultry> list = new ArrayList<>();
         String sql = "SELECT * FROM inventory WHERE user_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -85,9 +152,8 @@ public class UserDAO {
                 String name = rs.getString("name");
                 String rarity = rs.getString("rarity");
 
-                if ("Turkey".equals(species)) list.add(new Turkey(name, rarity));
-                else if ("Pheasant".equals(species)) list.add(new Pheasant(name, rarity));
-                else list.add(new Duck(name, rarity));
+                Poultry poultry = createPoultryFromResultSet(rs);
+                list.add(poultry);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,18 +168,73 @@ public class UserDAO {
             ps.setString(2, name);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                String species = rs.getString("species");
-                String rarity = rs.getString("rarity");
-                if ("Turkey".equals(species)) return new Turkey(name, rarity);
-                if ("Pheasant".equals(species)) return new Pheasant(name, rarity);
-                return new Duck(name, rarity);
+                return createPoultryFromResultSet(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+
+    private boolean hasInventoryStatColumns(Connection conn) {
+        try (PreparedStatement ps = conn.prepareStatement("SELECT attack, speed, iq, energy FROM inventory LIMIT 1")) {
+            ps.executeQuery();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    private void setInventoryInsertParams(PreparedStatement ps, int userId, Poultry poultry, boolean includeStats) throws SQLException {
+        ps.setInt(1, userId);
+        ps.setString(2, poultry.getSpecies());
+        ps.setString(3, poultry.getName());
+        ps.setString(4, poultry.getRarity());
+
+        if (includeStats) {
+            ps.setInt(5, poultry.getAttack());
+            ps.setInt(6, poultry.getSpeed());
+            ps.setInt(7, poultry.getIq());
+            ps.setInt(8, poultry.getEnergy());
+        }
+    }
+
+    private Poultry createPoultryFromResultSet(ResultSet rs) throws SQLException {
+        String species = rs.getString("species");
+        String name = rs.getString("name");
+        String rarity = rs.getString("rarity");
+        Poultry poultry;
+
+        if ("Turkey".equals(species)) {
+            poultry = new Turkey(name, rarity);
+        } else if ("Pheasant".equals(species)) {
+            poultry = new Pheasant(name, rarity);
+        } else {
+            poultry = new Duck(name, rarity);
+        }
+
+        int attack = getIntOrDefault(rs, "attack", 0);
+        int speed = getIntOrDefault(rs, "speed", 0);
+        int iq = getIntOrDefault(rs, "iq", 0);
+        int energy = getIntOrDefault(rs, "energy", poultry.getEnergy());
+
+        if (attack > 0 || speed > 0 || iq > 0) {
+            poultry.setAttack(attack);
+            poultry.setSpeed(speed);
+            poultry.setIq(iq);
+        }
+        poultry.setEnergy(energy > 0 ? energy : poultry.getEnergy());
+        return poultry;
+    }
+
+    private int getIntOrDefault(ResultSet rs, String columnName, int defaultValue) {
+        try {
+            return rs.getInt(columnName);
+        } catch (SQLException e) {
+            return defaultValue;
+        }
+    }
+
     public boolean register(UserBean user) {
 
     boolean success = false;
@@ -143,5 +264,5 @@ public class UserDAO {
     }
 
     return success;
-    }   
+    }
 }

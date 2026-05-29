@@ -31,7 +31,7 @@ public class Duck extends Poultry {
         int baseYield = GameConstants.BASE_TRAIN_IQ;
         int change = calculateStatChange(baseYield, failed);
         setIq(this.iq + change);
-        setEnergy(this.energy - GameConstants.IQ_TRAINING_ENERGY_COST);
+        setEnergy(this.energy + calculateIqEnergyGain());
     }
 
     @Override
@@ -42,5 +42,19 @@ public class Duck extends Poultry {
     @Override
     public int getPrimaryStatValue() {
         return (getAttack() + getSpeed()) / 2;
+    }
+    @Override
+    public int getExpectedAttackGain() {
+        return GameConstants.BASE_TRAIN_STAT + this.iq;
+    }
+
+    @Override
+    public int getExpectedSpeedGain() {
+        return GameConstants.BASE_TRAIN_STAT + this.iq;
+    }
+
+    @Override
+    public int getExpectedIqGain() {
+        return GameConstants.BASE_TRAIN_IQ;
     }
 }
