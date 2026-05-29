@@ -44,14 +44,18 @@
                     </div>
 
                     <div class="text-start mb-5 mt-auto p-3 rounded-4 bg-light">
+                        <% if (!"Pheasant".equalsIgnoreCase(p.getSpecies())) { %>
                         <div class="d-flex justify-content-between small mb-2">
                             <span class="fw-bold"><i class="fas fa-shield-alt me-1 text-primary"></i>Attack</span>
                             <span class="fw-bold text-primary"><%= p.getAttack() %></span>
                         </div>
+                        <% } %>
+                        <% if (!"Turkey".equalsIgnoreCase(p.getSpecies())) { %>
                         <div class="d-flex justify-content-between small mb-2">
                             <span class="fw-bold"><i class="fas fa-bolt me-1 text-primary"></i>Speed</span>
                             <span class="fw-bold text-primary"><%= p.getSpeed() %></span>
                         </div>
+                        <% } %>
                         <div class="d-flex justify-content-between small mb-2">
                             <span class="fw-bold"><i class="fas fa-brain me-1 text-primary"></i>IQ</span>
                             <span class="fw-bold text-primary"><%= p.getIq() %></span>

@@ -34,28 +34,10 @@ public class CareerManager {
             }
         } else {
             switch (action) {
-                case "train_attack":
-                    if (poultry.canTrainAttack()) {
-                        poultry.trainAttack();
-                        turnAdvanced = true;
-                    }
-                    break;
-                case "train_speed":
-                    if (poultry.canTrainSpeed()) {
-                        poultry.trainSpeed();
-                        turnAdvanced = true;
-                    }
-                    break;
-                case "train_iq":
-                    if (poultry.canTrainIQ()) {
-                        poultry.trainIQ();
-                        turnAdvanced = true;
-                    }
-                    break;
-                case "rest":
-                    poultry.rest();
-                    turnAdvanced = true;
-                    break;
+                case "train_attack": poultry.trainAttack(); turnAdvanced = true; break;
+                case "train_speed": poultry.trainSpeed(); turnAdvanced = true; break;
+                case "train_iq": poultry.trainIQ(); turnAdvanced = true; break;
+                case "rest": poultry.rest(); turnAdvanced = true; break;
                 case "fight":
                 case "race":
                     if (canCompete() && poultry.getEnergy() >= GameConstants.COMPETITION_ENERGY_COST) {
