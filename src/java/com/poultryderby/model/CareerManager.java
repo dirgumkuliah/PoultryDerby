@@ -21,6 +21,7 @@ public class CareerManager {
     public void processTurn(String action) {
         if (careerOver) return;
 
+<<<<<<< Updated upstream
         boolean turnAdvanced = false;
 
         if (isBossTurn()) {
@@ -47,6 +48,28 @@ public class CareerManager {
                     }
                     break;
             }
+=======
+        switch (action) {
+            case "train_attack":
+                if (!poultry.canTrainAttack()) return;
+                poultry.trainAttack();
+                break;
+            case "train_speed":
+                if (!poultry.canTrainSpeed()) return;
+                poultry.trainSpeed();
+                break;
+            case "train_iq":
+                if (!poultry.canTrainIQ()) return;
+                poultry.trainIQ();
+                break;
+            case "rest": poultry.rest(); break;
+            case "fight":
+            case "race":
+                handleStandardEncounter();
+                break;
+            default:
+                return;
+>>>>>>> Stashed changes
         }
 
         if (turnAdvanced && !careerOver) {

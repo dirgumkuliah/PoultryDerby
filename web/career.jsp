@@ -84,7 +84,6 @@
                         <span class="badge py-2 px-3 rounded-pill bg-light text-primary border border-primary">YEAR <%= cm.getYear()%></span>
                         <div class="text-muted fw-bold">TURN: <%= cm.getYearTurn()%> / <%= cm.getMaxYear()%></div>
                     </div>
-
                     <div class="text-center py-4">
                         <% if (cm.isCareerOver()) {%>
                             <div class="py-5">
@@ -101,15 +100,21 @@
                         %>
                             <h4 class="fw-bold mb-5"><%= isBoss ? "Boss Incoming!" : "Training Ground" %></h4>
                             <div class="row g-4 justify-content-center">
+                                <% if (cm.getPoultry().canTrainAttack()) { %>
                                 <div class="col-12 col-sm-6">
                                     <a href="career?action=turn&type=train_attack" id="btn-train-attack" class="btn-outline-blue w-100 py-3 <%= isBoss ? "disabled" : "" %>" <%= isBoss ? "style='pointer-events: none; opacity: 0.5;'" : "" %>>Train Attack</a>
                                 </div>
+                                <% } %>
+                                <% if (cm.getPoultry().canTrainSpeed()) { %>
                                 <div class="col-12 col-sm-6">
                                     <a href="career?action=turn&type=train_speed" id="btn-train-speed" class="btn-outline-blue w-100 py-3 <%= isBoss ? "disabled" : "" %>" <%= isBoss ? "style='pointer-events: none; opacity: 0.5;'" : "" %>>Train Speed</a>
                                 </div>
+                                <% } %>
+                                <% if (cm.getPoultry().canTrainIQ()) { %>
                                 <div class="col-12 col-sm-6">
                                     <a href="career?action=turn&type=train_iq" id="btn-train-iq" class="btn-outline-blue w-100 py-3 <%= isBoss ? "disabled" : "" %>" <%= isBoss ? "style='pointer-events: none; opacity: 0.5;'" : "" %>>Train IQ</a>
                                 </div>
+                                <% } %>
                                 <div class="col-12 col-sm-6">
                                     <a href="career?action=turn&type=rest" id="btn-rest" class="btn-outline-blue w-100 py-3 <%= (isBoss && canFightEnergy) ? "disabled" : "" %>" <%= (isBoss && canFightEnergy) ? "style='pointer-events: none; opacity: 0.5;'" : "" %>>Rest & Recover</a>
                                 </div>
