@@ -35,6 +35,11 @@ public class Turkey extends Poultry {
     }
 
     @Override
+    public boolean canTrainSpeed() {
+        return false;
+    }
+
+    @Override
     public String getPrimaryStatName() { return "Attack"; }
 
     @Override

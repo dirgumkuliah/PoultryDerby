@@ -35,6 +35,11 @@ public class Pheasant extends Poultry {
     }
 
     @Override
+    public boolean canTrainAttack() {
+        return false;
+    }
+
+    @Override
     public String getPrimaryStatName() { return "Speed"; }
 
     @Override
